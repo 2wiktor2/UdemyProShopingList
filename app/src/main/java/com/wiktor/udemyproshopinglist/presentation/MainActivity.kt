@@ -1,7 +1,8 @@
-package com.wiktor.udemyproshopinglist
+package com.wiktor.udemyproshopinglist.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.wiktor.udemyproshopinglist.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
