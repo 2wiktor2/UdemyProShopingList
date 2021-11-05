@@ -1,12 +1,21 @@
 package com.wiktor.udemyproshopinglist.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.wiktor.udemyproshopinglist.domain.ShopItem
 import com.wiktor.udemyproshopinglist.domain.ShopListRepository
 
 object ShopListRepositoryImpl : ShopListRepository {
     private val shopList = mutableListOf<ShopItem>()
-
+    private val shopListLiveData = MutableLiveData<List<ShopItem>>()
     private var autoincrementId = 0
+
+    init {
+        for (i in 0 until 10) {
+            val item = ShopItem("name $i", i, true)
+            addShopItem(item)
+        }
+    }
 
 
     override fun addShopItem(shopItem: ShopItem) {
@@ -14,10 +23,12 @@ object ShopListRepositoryImpl : ShopListRepository {
             shopItem.id = autoincrementId++
         }
         shopList.add(shopItem)
+        updateList()
     }
 
     override fun deleteShopItem(shopItem: ShopItem) {
         shopList.remove(shopItem)
+        updateList()
     }
 
     override fun editShopItem(shopItem: ShopItem) {
@@ -32,7 +43,11 @@ object ShopListRepositoryImpl : ShopListRepository {
         } ?: throw RuntimeException("Element with id $shopItemId not found")
     }
 
-    override fun getShopList(): List<ShopItem> {
-        return shopList.toList()
+    override fun getShopList(): LiveData<List<ShopItem>> {
+        return shopListLiveData
+    }
+
+    private fun updateList(){
+        shopListLiveData.value = shopList.toList()
     }
 }
